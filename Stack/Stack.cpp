@@ -25,42 +25,30 @@ void Push(Stack& stack, int value)
 {
 	Element* element = new Element;
 	element->value = value;
-	stack.count++;
 
-	if (stack.top == nullptr)
-	{
-		stack.top = element;
-		element->pNext = nullptr;
-	}
-	else if(stack.top->pNext == element)
-	{
-		stack.top = element->pNext;
-		stack.top->pNext = nullptr;
-	}
-	else
-	{
-		stack.top = element->pNext;
-		stack.top->pNext = nullptr;
-	}
+	element->pNext = stack.top;
+	stack.top = element;
+	stack.count++;
 }
 
 bool Pop(Stack& stack)
 {
-	Element* element{ stack.top };
-
-	while (element->pNext != nullptr)
+	if (stack.count == 0)
 	{
-		if (element->pNext == stack.top)
-		{
-			break;
-		}
-
-		stack.top = element->pNext;
+		std::cout << "Stack is empty..." << std::endl;
+		return false;
 	}
 
-	delete element;
+	Element* prevTop{ stack.top };
 
-	return false;
+	std::cout << "POP : " << prevTop->value << std::endl;
+
+	stack.top = stack.top->pNext;
+	stack.count--;
+
+	delete prevTop;
+
+	return true;
 }
 
 void Print(Stack& stack)
@@ -69,7 +57,7 @@ void Print(Stack& stack)
 
 	while (element != nullptr)
 	{
-		std::cout << "# " << stack.count << " : " << element->value << std::endl;
+		std::cout << element->value << std::endl;
 		element = element->pNext;
 	}
 }
